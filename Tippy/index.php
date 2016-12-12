@@ -5,6 +5,48 @@
 		<meta charset="utf-8" />
 	</head>
 	<body>
+		<?php
+		// define variables and set to empty values
+		$subtotalError = $tipError = "";
+		$persons = 1;
+		$valid = true;
+		$subtotal = $tipPercentage = $tip = $total = $personTip = $personTotal = 0;
+
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+		  //check if subtotal exist, if it exist, check if its valid
+		  if (empty($_POST["subtotal"])) {
+		    $subtotalError = "Subtotal is required";
+			$valid = false;
+		  } else {
+			 $subtotal = trim_input($_POST["subtotal"]);
+			//check if the input is a number
+			if (!preg_match("([0-9]*\.?[0-9]+)", $subtotal)) {
+		      $subtotalError = "Invalid Subtotal";
+			  $subtotal = 0;
+			  $valid = false;
+		    } else {
+				//else round the subtotal to two decimal places
+				$subtotal = round(trim_input($_POST["subtotal"]), 2);
+			}
+		  }
+
+		  if(empty($_POST["tipPercent"])) {
+			$tipError = "Tip Percentage Required";
+			$valid = false;
+		  } else {
+			//else round the subtotal to two decimal places
+			$tipPercentage = round(floatval($_POST["tipPercent"]), 2);
+		  }
+		}
+
+		function trim_input($data) {
+		  $data = trim($data);
+		  $data = stripslashes($data);
+		  $data = htmlspecialchars($data);
+		  return $data;
+		}
+		?>
 		<h2>Tippy the Tip Calculator</h2>
 		<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">  
   
