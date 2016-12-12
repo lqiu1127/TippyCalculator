@@ -74,7 +74,7 @@ function trim_input($data) {
   <input type="submit" name="submit" value="Submit">  
 </form>
 <?php
-if ($valid){
+if ($valid && !empty($_POST["subtotal"])){
 	echo "<h3>Tippy says:</h3>";
 	print "Tip: $";
 	$tip = $subtotal * $tipPercentage;
