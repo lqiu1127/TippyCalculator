@@ -22,6 +22,7 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [x] Added support for random amount of tip between 20-50%
+* [x] Added button for resetting the page with JavaScript
 
 ## Video Walkthrough
 
@@ -33,7 +34,8 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+This is my first time doing PHP or any real web development. I think it was not extremely difficult since PHP is faily similar to C++ or Java and it is also compiled (to some degree), which allows me to easily identify errors in the code. I had to learn HTML and CSS from scratch and that took some time.
+It was also difficult at first to try to use php to output the radio buttons in a loop since the tutorial I went through only had two buttons hardcoded. However, I eventually figured it out with trial and error and it all made sense to me in the end.
 
 ## License
 
