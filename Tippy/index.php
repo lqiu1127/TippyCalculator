@@ -48,6 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		//else round the subtotal to two decimal places
 		$tipPercentage = round(trim_input($_POST["custom"]/100), 4);
 	}
+  } elseif (!strcmp($_POST["tipPercent"], "random")){
+	//else randomly generate a tip preentage between 20 and 50
+	$tipPercentage = round(rand(2000, 5000)/10000, 4);
   } else {
 	//else round the subtotal to two decimal places
 	$tipPercentage = round(floatval($_POST["tipPercent"]), 2);
@@ -92,6 +95,10 @@ function trim_input($data) {
 	}
 
 	printf("<input type=\"text\" name=\"custom\" value=\"%s\" />%%", $value);
+	print "<br>";
+	//generate random value
+	printf("<input type=\"radio\" name=\"tipPercent\" value=\"random\" %s /> I am feeling generous" , 
+		(!strcmp($prevTip,"random")) ? "checked" : "");
 	print "<br>";
 	
 	?>
