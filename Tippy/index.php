@@ -11,8 +11,8 @@
 
 <?php
 // define variables and set to empty values
-$subtotalError = $tipError = "";
-$persons = 1;
+$subtotalError = $tipError = $splitError = "";
+$split = 1;
 $valid = true;
 $subtotal = $tipPercentage = $tip = $total = $personTip = $personTotal = 0;
 
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
 	 $subtotal = trim_input($_POST["subtotal"]);
 	//check if the input is a number
-	if (!preg_match("([0-9]*\.?[0-9]+)", $subtotal)) {
+	if (!preg_match("(^[0-9]*\.?[0-9]+$)", $subtotal)) {
       $subtotalError = "Invalid Subtotal";
 	  $subtotal = 0;
 	  $valid = false;
@@ -40,11 +40,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$valid = false;
   } elseif (!strcmp($_POST["tipPercent"], "custom")){
 	$tipPercentage = trim_input($_POST["custom"]); 
-	if (!preg_match("([0-9]*\.?[0-9]+)", $tipPercentage)) {
-      $tipError = "Invalid Subtotal";
+
+	if (!preg_match("(^[0-9]*\.?[0-9]+$)", $tipPercentage)) {
+      $tipError = "Invalid Tip Percentage";
 	  $tipPercentage = 0;
 	  $valid = false;
-    } else {
+    } elseif (!$tipPercentage){
+	  $tipError = "Please enter a tip percentage greater than 0.";
+	  $tipPercentage = 0;
+	  $valid = false;
+	}else {
 		//else round the subtotal to two decimal places
 		$tipPercentage = round(trim_input($_POST["custom"]/100), 4);
 	}
@@ -55,8 +60,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	//else round the subtotal to two decimal places
 	$tipPercentage = round(floatval($_POST["tipPercent"]), 2);
   }
+  
+  //check if split persons exist, if it exist, check if its valid
+  if (empty($_POST["split"])) {
+    $splitError = "Split number is required";
+	$valid = false;
+  } else {
+	 $split = trim_input($_POST["split"]);
+	//check if the input is a number
+	if (!preg_match("(^[0-9]+$)", $split)) {
+      $splitError = "Invalid split";
+	  $split = 1;
+	  $valid = false;
+    } else {
+		//else round the subtotal to two decimal places
+		$split = trim_input($_POST["split"]);
+	}
+  }
+  
 }
 
+//used to trim the inputs before checking equality
 function trim_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -90,6 +114,7 @@ function trim_input($data) {
 	//if custom is selected, keep track of the value
 	if (!strcmp($prevTip, "custom")){
 		$value = doubleval($_POST['custom']);
+		$value = ($tipPercentage) ? doubleval($_POST['custom']) : 0;
 	} else {
 		$value = "";
 	}
@@ -100,22 +125,37 @@ function trim_input($data) {
 	printf("<input type=\"radio\" name=\"tipPercent\" value=\"random\" %s /> I am feeling generous" , 
 		(!strcmp($prevTip,"random")) ? "checked" : "");
 	print "<br>";
-	
 	?>
+	<span class="error"><?php echo $tipError;?></span>
+  <br><br>
+  Split: $<input type="text" name="split" value="<?php echo $split;?>"> person(s)
+  <br>
+  <span class="error"><?php echo $splitError;?></span> 
   <br><br>
   <input type="submit" name="submit" value="Submit">  
 </form>
 <?php
 if ($valid && !empty($_POST["subtotal"])){
 	echo "<h3>Tippy says:</h3>";
-	print "Tip: $";
+	echo "Tip: $";
 	$tip = $subtotal * $tipPercentage;
 	echo number_format($tip, 2);
-	echo "<br>";
-	print "Total: $";
+	echo "<br><br>";
+	echo "Total: $";
 	$total = $subtotal + $tip;
 	echo number_format($total, 2);
-	echo "<br>";
+	echo "<br><br>";
+	//if there is more than 1 person splitting
+	if ($split > 1){
+		echo "Tip each: $";
+		$personTip = $tip / $split;
+		echo number_format($personTip, 2);
+		echo "<br><br>";
+		echo "Total each: $";
+		$personTotal = $total / $split;
+		echo number_format($personTotal, 2);
+		echo "<br><br>";
+	}
 }
 ?>
 
