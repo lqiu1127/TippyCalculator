@@ -1,17 +1,14 @@
-# TippyCalculator
-A tip calculator in php.
-# Pre-work - *Name of App Here*
+# Pre-work - *Tippy*
+**Tippy** is a tip calculator PHP page.
 
-**Name of your app** is a tip calculator PHP page.
+Submitted by: **Tianhao (Leo) Qiu**
 
-Submitted by: **Your Name Here**
-
-Time spent: **X** hours spent in total
+Time spent: **12** hours spent in total
 
 ## User Stories
 
 The following **required** functionality is complete:
-* [ ] User can enter a bill amount, choose a tip percentage, and submit the form to see the tip and total values.
+* [ * ] User can enter a bill amount, choose a tip percentage, and submit the form to see the tip and total values.
 * [ ] Tip percentage choices use a PHP loop to output three radio buttons.
 * [ ] PHP code sets reasonable default values for the form.
 * [ ] PHP code confirms the presence and correct format of submitted values.
