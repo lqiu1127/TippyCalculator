@@ -1,0 +1,48 @@
+.error {
+	color: red;
+} 
+
+.button {
+	height: 30px;
+	width: 60px;
+	background-color: purple;
+	color: white;
+	box-shadow:  0 3px gray;
+	border: 1px lighter gray;
+	border-radius: 15px;
+}
+
+#main {
+	border: 8px solid white;
+	border-style: dashed;
+	font-size: 15px;
+	font-family: Verdana;
+	border-radius: 10px;
+	background-color: white;
+	width: 300px;
+	margin: 0 auto;
+}
+
+#title {
+	text-align: center;
+}
+
+#result {
+	margin: 10px;
+	padding-top: 6px;
+	padding-left: 10px;
+	border: dashed;
+    border: 1px solid purple;
+}
+input[type=text] {
+	width: 150px;
+	margin-left: 5px;
+	padding-left: 5px;
+	font-size: 15px;
+	text-align: left;
+	background-color: lighter gray;
+    border: none;
+    border-bottom: 2px solid purple;
+}
+
+
