@@ -38,6 +38,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if(empty($_POST["tipPercent"])) {
 	$tipError = "Tip Percentage Required";
 	$valid = false;
+  } elseif (!strcmp($_POST["tipPercent"], "custom")){
+	$tipPercentage = trim_input($_POST["custom"]); 
+	if (!preg_match("([0-9]*\.?[0-9]+)", $tipPercentage)) {
+      $tipError = "Invalid Subtotal";
+	  $tipPercentage = 0;
+	  $valid = false;
+    } else {
+		//else round the subtotal to two decimal places
+		$tipPercentage = round(trim_input($_POST["custom"]/100), 4);
+	}
   } else {
 	//else round the subtotal to two decimal places
 	$tipPercentage = round(floatval($_POST["tipPercent"]), 2);
@@ -61,15 +71,30 @@ function trim_input($data) {
   Tip Percent:
   <br><br>
   <?php
-	//if the tip percent is not currently empty
-	if(!empty($_POST["tipPercent"])) $prevTip = $_POST["tipPercent"]*100;
-    else $prevTip = 15; //set default value to be 15%
+	//if the tip percent is not currently empty, get the current percentage
+	if(!empty($_POST["tipPercent"])) $prevTip = $_POST["tipPercent"];
+    else $prevTip = 0.15; //set default value to be 15%
     $tips = [10, 15, 20]; //array of tip values
 	//for each value of the array, output the coorsponding redio button
-    foreach($tips as &$tipPercent)
+    foreach($tips as &$tipPercent){
         printf("<input type=\"radio\" name=\"tipPercent\" value=\"%0.2f\" %s /> %d%% \t", 
-            $tipPercent/100,(intval($prevTip)==intval($tipPercent)) ? "checked" : "", $tipPercent);
-  ?>
+            $tipPercent/100,(intval($prevTip*100)==intval($tipPercent)) ? "checked" : "", $tipPercent);
+	}
+	print "<br>";
+	printf("<input type=\"radio\" name=\"tipPercent\" value=\"custom\" %s /> Custom" , 
+		(!strcmp($prevTip,"custom")) ? "checked" : "");
+	
+	//if custom is selected, keep track of the value
+	if (!strcmp($prevTip, "custom")){
+		$value = doubleval($_POST['custom']);
+	} else {
+		$value = "";
+	}
+
+	printf("<input type=\"text\" name=\"custom\" value=\"%s\" />%%", $value);
+	print "<br>";
+	
+	?>
   <br><br>
   <input type="submit" name="submit" value="Submit">  
 </form>
